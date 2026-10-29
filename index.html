@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>yourself.</title>
+<meta name="description" content="yourself. — коротка новела про думки, що приходять одна за одною, про втрату і про надію.">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="yourself.">
+<meta property="og:description" content="Коротка новела про думки, втрату і надію. Чудове — в найближчих зорях і в найрідніших дрібницях.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23000'/%3E%3Cpath d='M8 1v4M8 11v4M1 8h4M11 8h4' stroke='%23fff3d0' stroke-width='2'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%23fff3d0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&family=Tiny5&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="stage">
+  <canvas id="game"></canvas>
+  <canvas id="hud"></canvas>
+</div>
+
+<div id="fade"></div>
+<div id="loc-title"><div class="n"></div><div class="t"></div></div>
+<div id="hint"></div>
+
+<div id="dialog" hidden>
+  <div class="dlg-box">
+    <div class="dlg-name"></div>
+    <div class="dlg-text"></div>
+    <div class="dlg-next">&#9660;</div>
+  </div>
+</div>
+
+<div id="loading" class="screen">
+  <div class="load-star"></div>
+  <div class="load-label" data-i18n="loading">завантаження</div>
+  <div class="load-bar"><i></i></div>
+</div>
+
+<div id="title" class="screen" hidden>
+  <h1 class="logo">yourself.</h1>
+  <div class="title-sub" data-i18n="sub">новела про думки, втрату і надію</div>
+  <div class="menu" id="title-menu"></div>
+  <div class="title-foot" data-i18n="foot">найкраще — в навушниках і в тиші</div>
+  <button type="button" class="lang-btn" id="lang-btn">мова: українська</button>
+  <div class="fs-tip" id="fs-tip">
+    <div class="fs-h" data-i18n="fs">повний екран</div>
+    <div><b id="fs-pc-name">ПК</b> — <span data-i18n="fsPc">F11 або F</span></div>
+    <div><b>Android</b> — <span data-i18n="fsAndroid">кнопка нижче</span></div>
+    <div><b>iPhone</b> — <span data-i18n="fsIphone">Поділитися → На початковий екран</span></div>
+    <button type="button" class="fs-btn" id="fs-btn" data-i18n="fsBtn">на весь екран</button>
+  </div>
+</div>
+
+<div id="pause" class="screen dim" hidden>
+  <div class="panel">
+    <h2 data-i18n="pause">пауза</h2>
+    <div class="menu" id="pause-menu"></div>
+    <label class="vol"><span data-i18n="volume">гучність</span> <input type="range" id="vol" min="0" max="100" value="80"></label>
+    <div class="keys" data-i18n="keys">WASD / стрілки — рух · E / Enter — дія · Esc — пауза · M — звук · F — повний екран</div>
+    <div class="author" id="pause-author"></div>
+  </div>
+</div>
+
+<div id="support" class="screen dim" hidden>
+  <div class="panel">
+    <h2 data-i18n="supTitle">підтримати автора</h2>
+    <p class="sup-text" data-i18n="supText">Якщо «yourself.» відгукнулося — можна підтримати подальшу роботу.</p>
+    <a class="sup-patreon" id="sup-patreon" target="_blank" rel="noopener" hidden data-i18n="patreon">підтримати на Patreon</a>
+    <div class="menu" id="support-menu"></div>
+  </div>
+</div>
+
+<div id="credits" class="screen" hidden>
+  <div class="credits-roll" id="credits-roll"></div>
+</div>
+
+<div id="touch-ui">
+  <button id="t-pause" type="button" aria-label="пауза">II</button>
+  <button id="t-act" type="button" aria-label="дія"><span>E</span><small></small></button>
+</div>
+
+<div id="sound-note" hidden></div>
+
+<noscript><div class="noscript">Для гри потрібен JavaScript.</div></noscript>
+
+<script src="js/config.js"></script>
+<script src="js/util.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/input.js"></script>
+<script src="js/sprites.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/world.js"></script>
+<script src="js/text.js"></script>
+<script src="js/dialog.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/locations/hall.js"></script>
+<script src="js/locations/corridor.js"></script>
+<script src="js/locations/room.js"></script>
+<script src="js/locations/garden.js"></script>
+<script src="js/locations/bridge.js"></script>
+<script src="js/locations/valley.js"></script>
+<script src="js/locations/workshop.js"></script>
+<script src="js/locations/gallery.js"></script>
+<script src="js/peeks.js"></script>
+<script src="js/locations/station.js"></script>
+<script src="js/locations/stars.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
