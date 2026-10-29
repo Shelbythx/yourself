@@ -215,6 +215,36 @@
       P('…Ну от. А я ще трохи посиджу тут, біля зірок.')
     ],
 
+    // п'ять пасхалок і єдина ачівка за всі
+    eggs: {
+      found: 'пасхалка', pause: 'пасхалки',
+      achGot: 'ачівку отримано', achName: 'Ти бачиш більше', achDesc: 'знайти всі п\'ять пасхалок',
+      cat: [
+        '* На підвіконня тихо вмощується кіт. Звідки він тут — незрозуміло.',
+        '* Він теж дивиться на дощ і нікуди не поспішає. Удвох мовчати легше.'
+      ],
+      save: 'зберегтися',
+      saveLines: [
+        '* Серед каміння мерехтить маленька жовта зірка.',
+        '* Думка про те, що навіть найбільша скеля — лише камінчик, сповнює тебе РІШУЧІСТЮ.',
+        '* (Здоров\'я не відновлено. Його тут ніхто й не забирав.)'
+      ],
+      flower: 'cvrsxd?',
+      flowerLines: [
+        '* Квітка, якої тут раніше не було. Мабуть, хтось із подорожніх зупинився саме тут.',
+        '* На тоненькій бирці — одне слово: «cvrsxd?»'
+      ],
+      skull: [
+        '* У кутку лежить маленький білий черепок. Холодний, ніби з далекої крижаної планети.',
+        '* На звороті подряпано: «Copper-9».'
+      ],
+      raccoon: [
+        '* Під сосною хтось старанно риє землю.',
+        { name: 'Енот Земляной', t: '…' },
+        '* Енот Земляной дістає жолудь, уважно його оглядає — і закопує назад. Про всяк випадок.'
+      ]
+    },
+
     credits: {
       locations: [
         ['I. Коридор думок', 'нав\'язливі думки, оверсінкінг'],
@@ -246,7 +276,7 @@
       patreon: 'підтримати на Patreon',
       share: 'поділитися', shareText: 'Коротка новела про думки, втрату і надію.', linkCopied: 'посилання скопійовано', next: 'далі',
       cRooms: 'кімнати і те, що в них живе', cAuthor: 'автор', cAuthorLine: 'ідея, сценарій, код і світло',
-      cMusic: 'музика', cFonts: 'шрифти',
+      cMusic: 'музика', cFonts: 'шрифти',
       rights: '© 2026 {author}. Усі права на гру захищено.', rightsSub: 'Музика, шрифти й вірш належать їхнім авторам.',
       hintMove: 'WASD / стрілки — рух · E / Enter — дія · Esc — пауза', hintMoveTouch: 'джойстик — рух · кнопка — дія',
       soundNote: 'цей браузер не відтворює частину музики (.ogg) — гра працюватиме, але тихіше'
@@ -437,6 +467,35 @@
       P('…There. I\'ll sit here by the stars a little longer.')
     ],
 
+    eggs: {
+      found: 'easter egg', pause: 'easter eggs',
+      achGot: 'achievement unlocked', achName: 'You See More Now', achDesc: 'find all five easter eggs',
+      cat: [
+        '* A cat quietly settles onto the windowsill. Where did it come from? No idea.',
+        '* It watches the rain too, in no hurry at all. Silence is easier with two.'
+      ],
+      save: 'save',
+      saveLines: [
+        '* A small yellow star twinkles among the stones.',
+        '* The thought that even the biggest rock is just a pebble fills you with DETERMINATION.',
+        '* (HP not restored. Nobody took any here.)'
+      ],
+      flower: 'cvrsxd?',
+      flowerLines: [
+        '* A flower that wasn\'t here before. One of the travelers must have stopped right here.',
+        '* On a thin little tag, a single word: "cvrsxd?"'
+      ],
+      skull: [
+        '* A small white skull lies in the corner. Cold, as if from a distant frozen planet.',
+        '* Scratched on the back: "Copper-9".'
+      ],
+      raccoon: [
+        '* Someone is busily digging under a pine.',
+        { name: 'Enot Zemlyanoy', t: '…' },
+        '* Enot Zemlyanoy digs up an acorn, inspects it carefully — and buries it again. Just in case.'
+      ]
+    },
+
     credits: {
       locations: [
         ['I. The Corridor of Thoughts', 'intrusive thoughts, overthinking'],
@@ -477,7 +536,7 @@
       patreon: 'support on Patreon',
       share: 'share', shareText: 'A short novel about thoughts, loss and hope.', linkCopied: 'link copied', next: 'next',
       cRooms: 'the rooms and what lives in them', cAuthor: 'author', cAuthorLine: 'idea, story, code and light',
-      cMusic: 'music', cFonts: 'fonts',
+      cMusic: 'music', cFonts: 'fonts',
       rights: '© 2026 {author}. All rights to the game reserved.', rightsSub: 'The music, fonts and poem belong to their authors.',
       hintMove: 'WASD / arrows — move · E / Enter — act · Esc — pause', hintMoveTouch: 'joystick — move · button — act',
       soundNote: 'this browser can\'t play part of the music (.ogg) — the game still works, just quieter'
@@ -668,6 +727,35 @@
       P('…Ну вот. А я ещё немного посижу здесь, у звёзд.')
     ],
 
+    eggs: {
+      found: 'пасхалка', pause: 'пасхалки',
+      achGot: 'достижение получено', achName: 'Ты видишь больше', achDesc: 'найти все пять пасхалок',
+      cat: [
+        '* На подоконник тихо устраивается кот. Откуда он здесь — непонятно.',
+        '* Он тоже смотрит на дождь и никуда не спешит. Вдвоём молчать легче.'
+      ],
+      save: 'сохраниться',
+      saveLines: [
+        '* Среди камней мерцает маленькая жёлтая звезда.',
+        '* Мысль о том, что даже самая большая скала — всего лишь камешек, наполняет тебя РЕШИМОСТЬЮ.',
+        '* (Здоровье не восстановлено. Его здесь никто и не отнимал.)'
+      ],
+      flower: 'cvrsxd?',
+      flowerLines: [
+        '* Цветок, которого здесь раньше не было. Наверное, кто-то из путников остановился именно здесь.',
+        '* На тоненькой бирке — одно слово: «cvrsxd?»'
+      ],
+      skull: [
+        '* В углу лежит маленький белый черепок. Холодный, будто с далёкой ледяной планеты.',
+        '* На обороте нацарапано: «Copper-9».'
+      ],
+      raccoon: [
+        '* Под сосной кто-то старательно роет землю.',
+        { name: 'Енот Земляной', t: '…' },
+        '* Енот Земляной достаёт жёлудь, внимательно его осматривает — и закапывает обратно. На всякий случай.'
+      ]
+    },
+
     credits: {
       locations: [
         ['I. Коридор мыслей', 'навязчивые мысли, оверсинкинг'],
@@ -708,7 +796,7 @@
       patreon: 'поддержать на Patreon',
       share: 'поделиться', shareText: 'Короткая новелла о мыслях, потере и надежде.', linkCopied: 'ссылка скопирована', next: 'далее',
       cRooms: 'комнаты и то, что в них живёт', cAuthor: 'автор', cAuthorLine: 'идея, сценарий, код и свет',
-      cMusic: 'музыка', cFonts: 'шрифты',
+      cMusic: 'музыка', cFonts: 'шрифты',
       rights: '© 2026 {author}. Все права на игру защищены.', rightsSub: 'Музыка, шрифты и стихотворение принадлежат их авторам.',
       hintMove: 'WASD / стрелки — движение · E / Enter — действие · Esc — пауза', hintMoveTouch: 'джойстик — движение · кнопка — действие',
       soundNote: 'этот браузер не воспроизводит часть музыки (.ogg) — игра работает, но тише'

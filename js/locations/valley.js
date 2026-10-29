@@ -13,6 +13,7 @@
     ['lamp', 62, 9], ['sprout', 67, 5]
   ];
   const TREE = { x: 75 * 16 + 8, y: 7 * 16 + 8 };
+  const FLOWER = { x: 1 * 16 + 12, y: 6 * 16 + 12 };  // easter egg: appears at the very start once the travelers have passed
 
   function makeMap() {
     const rows = [], r = U.rng(8);
@@ -179,6 +180,8 @@
     }
 
     interactables() {
+      if (this.stage === 3) return [{ x: FLOWER.x, y: FLOWER.y, r: 20, label: TX.eggs.flower, py: FLOWER.y - 14,
+        act: () => this.G.say(TX.eggs.flowerLines).then(() => this.G.egg('flower')) }];
       if (this.stage !== 0) return [];
       return this.targets.filter(t => !t.lit).map(t => ({ x: t.x, y: t.y - 4, r: 24, label: TX.valley.give, act: () => this.give(t) }));
     }
@@ -271,6 +274,7 @@
     drawables() {
       const out = this.targets.map(t => ({ y: t.y, draw: ctx => this.drawTarget(ctx, t) }));
       out.push({ y: TREE.y, draw: ctx => this.drawTree(ctx) });
+      if (this.stage >= 3) out.push({ y: FLOWER.y, draw: ctx => drawFlower(ctx, FLOWER.x, FLOWER.y, this.t) });
       const p = this.P;
       // the crystal vessel in your hands
       out.push({ y: p.y + 0.5, draw: ctx => {
@@ -296,6 +300,7 @@
         E.addLight(t.x, t.y - 10, 30 + 30 * t.b, 0.75 * t.b, rgb, 0.45);
       }
       if (this.tree.b > 0) E.addLight(TREE.x, TREE.y - 30, 90 * this.tree.b, 0.9, '200,180,255', 0.45);
+      if (this.stage >= 3) E.addLight(FLOWER.x, FLOWER.y - 12, 26, 0.75, '220,190,255', 0.45);
       for (const s of this.streams) {
         const k = U.clamp(s.t / 0.8, 0, 1);
         for (let i = 0; i < 4; i++) {
@@ -334,6 +339,16 @@
       E.hudWorld();
     }
   }
+  // the cvrsxd? flower: lilac and pink petals around a warm centre, swaying a little
+  function drawFlower(ctx, x, y, t) {
+    const sw = Math.round(Math.sin(t * 1.4) * 0.6), cx = x + sw, cy = y - 12;
+    E.rect(ctx, x, y - 9, 1, 9, '#3f8a64');
+    E.rect(ctx, x - 3, y - 5, 3, 1, '#4fa878'); E.rect(ctx, x + 1, y - 3, 3, 1, '#4fa878');
+    E.rect(ctx, cx - 1, cy - 3, 3, 2, '#c8b4ff'); E.rect(ctx, cx - 1, cy + 2, 3, 2, '#c8b4ff');
+    E.rect(ctx, cx - 3, cy - 1, 2, 3, '#ff9be4'); E.rect(ctx, cx + 2, cy - 1, 2, 3, '#ff9be4');
+    E.rect(ctx, cx - 1, cy - 1, 3, 3, '#fff2a8');
+  }
+
   /* ---------------- travellers walking through the garden ---------------- */
   const WALKERS = [
     // a tall pilgrim with a lantern hanging from a staff

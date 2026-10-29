@@ -34,6 +34,7 @@
       this.vignette = 0.55;
       this.q = 0; this.warm = 0; this.done = false; this.doorA = 0;
       this.touched = {}; this.prints = []; this.embers = [];
+      this.sitT = 0; this.cat = null;
       this.rain = [];
       for (let i = 0; i < 90; i++) this.rain.push({ x: Math.random() * WIN.w, y: Math.random() * WIN.h, s: U.range(90, 160), l: U.range(3, 7) });
       this.drops = [];
@@ -98,6 +99,15 @@
         A.sfx.musicBox([523, 659, 784, 1046], 0.4, 0.05);
         G.say(TX.room.reflection);
       }
+      // easter egg: a whole minute in the chair, and a cat comes to watch the rain with you
+      if (p.sit && !Y.Dialog.active) this.sitT += dt;
+      else if (!p.sit) this.sitT = 0;
+      if (this.sitT >= 60 && !this.cat) {
+        this.cat = { a: 0 };
+        A.sfx.musicBox([784, 659, 523], 0.3, 0.04);
+        G.say(TX.eggs.cat).then(() => G.egg('cat'));
+      }
+      if (this.cat) this.cat.a = Math.min(1, this.cat.a + dt * 0.6);
       if (this.done) this.doorA = Math.min(1, this.doorA + dt * 0.4);
       if (this.done && p.x < 14 && Math.abs(p.y - 140) < 14) { this.done = 2; G.goto('garden'); }
       // rain & lightning
@@ -197,6 +207,7 @@
     drawFloor(ctx) {
       E.blitWorld(ctx, this.floor);
       this.drawWindow(ctx);
+      if (this.cat) drawCat(ctx, 152, WIN.y + WIN.h, this.cat.a, this.t, this.warm);
       // the door that appears
       if (this.doorA > 0) {
         ctx.globalAlpha = this.doorA;
@@ -260,6 +271,20 @@
       E.tint(ctx, '#5f78b8', 0.32 * (1 - w), 'multiply');
       E.tint(ctx, '#ffae60', 0.22 * w, 'soft-light');
     }
+  }
+
+  // the cat on the windowsill, seen from behind against the rain
+  function drawCat(ctx, x, y, a, t, warm) {
+    if (a <= 0) return;
+    const c = '#15121b', rim = warm > 0.5 ? '#c98a5a' : '#59648a';
+    const sway = Math.round(Math.sin(t * 1.3));
+    ctx.globalAlpha = a;
+    E.rect(ctx, x + 3, y, 1, 4, c); E.rect(ctx, x + 3 + sway, y + 4, 1, 2, c);   // tail over the sill
+    E.rect(ctx, x - 3, y - 5, 7, 5, c); E.rect(ctx, x - 2, y - 6, 5, 1, c);       // body
+    E.rect(ctx, x - 2, y - 10, 5, 4, c);                                          // head
+    E.rect(ctx, x - 2, y - 11, 1, 1, c); E.rect(ctx, x + 2, y - 11, 1, 1, c);     // ears
+    E.rect(ctx, x - 1, y - 10, 3, 1, rim); E.rect(ctx, x - 3, y - 5, 1, 1, rim); E.rect(ctx, x + 3, y - 5, 1, 1, rim);
+    ctx.globalAlpha = 1;
   }
 
   function drawHand(ctx, x, y, a, flip) {

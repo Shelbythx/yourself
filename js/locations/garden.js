@@ -8,6 +8,7 @@
   const U = Y.U, E = Y.E, A = Y.Audio, TX = Y.TEXT;
   const W = 30, H = 34;
   const SPOTS = [[8, 25], [21, 22], [9, 15], [20, 11], [14, 6]];
+  const STAR = { x: 3 * 16 + 8, y: 2 * 16 + 12 };  // easter egg: an Undertale save star in the top-left nook
 
   function makeMap() {
     const r = U.rng(31), rows = [];
@@ -144,9 +145,15 @@
     }
 
     interactables() {
-      return this.mons.filter(m => !m.named && !m.busy).map(m => ({
+      const out = this.mons.filter(m => !m.named && !m.busy).map(m => ({
         x: m.x, y: m.y - 4, r: 30, label: TX.listen, px: m.x, py: m.y - m.h * m.s * 0.45, act: () => this.listen(m)
       }));
+      out.push({ x: STAR.x, y: STAR.y, r: 20, label: TX.eggs.save, py: STAR.y - 8, act: () => {
+        A.sfx.musicBox([523, 784, 1046], 0.12, 0.05);
+        this.G.save();
+        this.G.say(TX.eggs.saveLines).then(() => this.G.egg('save'));
+      } });
+      return out;
     }
 
     drawFloor(ctx) {
@@ -223,6 +230,7 @@
 
     drawables() {
       const out = this.mons.map(m => ({ y: m.y, draw: ctx => this.drawMon(ctx, m) }));
+      out.push({ y: STAR.y, draw: ctx => drawSaveStar(ctx, STAR.x, STAR.y, this.t) });
       if (this.got) {
         const p = this.P, g = this.got;
         out.push({ y: p.y + 1, draw: ctx => drawItem(ctx, g.mem.icon, p.x, p.y - 24 - Math.min(1, g.t * 2) * 4, Math.min(1, g.t * 3) * (g.t > 2.5 ? (3 - g.t) * 2 : 1)) });
@@ -245,6 +253,7 @@
         else E.addLight(m.x, m.y - 2, 14, 0.5 * k, '255,230,190', 0.4);
       }
       if (this.allDone) E.addLight(240, 16, 70 * this.sky, 0.8, '200,220,255', 0.3);
+      E.addLight(STAR.x, STAR.y - 6, 20 + 4 * Math.sin(this.t * 3), 0.7, '255,225,110', 0.45);
     }
 
     drawPost(ctx) {
@@ -258,6 +267,9 @@
       ctx.globalAlpha = 1;
       E.tint(ctx, '#7a4060', this.threat * 0.3, 'multiply');
       E.tint(ctx, '#6070a0', (1 - this.sky) * 0.25, 'multiply');
+      // the save star shines through the gloom, unless you stand right in front of it
+      const p = this.P;
+      if (!(Math.abs(p.x - STAR.x) < 9 && p.y > STAR.y && p.y - STAR.y < 22)) drawSaveStar(ctx, STAR.x, STAR.y, this.t);
       // the sky opens: stars shine over the garden
       if (this.sky > 0.3) {
         ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -292,6 +304,15 @@
     mail: ['.......', '#######', '##...##', '#.#.#.#', '#..#..#', '#######', '.......'],
     mark: ['...#...', '...#...', '...#...', '...#...', '.......', '...#...', '.......']
   };
+  // a small yellow twinkle, the kind you save at
+  function drawSaveStar(ctx, x, y, t) {
+    const k = Math.sin(t * 3) > 0 ? 1 : 0, by = y - 6 + Math.round(Math.sin(t * 2));
+    E.rect(ctx, x - 1, by - 1, 3, 3, '#ffe14a');
+    E.rect(ctx, x, by - 3 - k, 1, 2 + k, '#ffe14a'); E.rect(ctx, x, by + 2, 1, 2 + k, '#ffe14a');
+    E.rect(ctx, x - 3 - k, by, 2 + k, 1, '#ffe14a'); E.rect(ctx, x + 2, by, 2 + k, 1, '#ffe14a');
+    E.rect(ctx, x, by, 1, 1, '#fffbe0');
+  }
+
   function drawIcon(ctx, kind, x, y, p, color) {
     const rows = ICONS[kind] || ICONS.mark;
     const x0 = Math.round(x - 3.5 * p), y0 = Math.round(y - 3.5 * p);

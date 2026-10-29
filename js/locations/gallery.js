@@ -44,6 +44,7 @@
     '###############'
   ];
   const WATER = { x: 5 * 16, y: 6 * 16, w: 80, h: 32 };
+  const SKULL = { x: 13 * 16 + 6, y: 31 * 16 + 10 };  // easter egg: a little white skull (Murder Drones) in the bottom-right corner
 
   class Gallery extends Y.Loc {
     constructor(G) {
@@ -174,6 +175,12 @@
       return true;
     }
     actLabel() { return this.masks.some(m => m.state === 'on') ? TX.gallery.remove : ''; }
+    interactables() {
+      // while masks are on, E takes them off; the skull waits until then
+      if (this.onCount > 0) return [];
+      return [{ x: SKULL.x, y: SKULL.y, r: 18, label: TX.look, py: SKULL.y - 8,
+        act: () => this.G.say(TX.eggs.skull).then(() => this.G.egg('skull')) }];
+    }
 
     drawFloor(ctx) {
       E.blitWorld(ctx, this.floor);
@@ -249,6 +256,7 @@
         E.rect(ctx, x - 4, y - 18, 8, 1, '#a49eaa');
       } });
       for (const mr of this.mirrors) out.push({ y: mr.y + 8, draw: ctx => this.drawMirror(ctx, mr) });
+      out.push({ y: SKULL.y, draw: ctx => drawSkull(ctx, SKULL.x, SKULL.y) });
       const p = this.P;
       // armour & masks on you
       out.push({ y: p.y + 0.5, draw: ctx => {
@@ -270,6 +278,7 @@
       for (const mr of this.mirrors) E.addLight(mr.x, mr.y - 8, 26, 0.3, '200,210,255', 0.15);
       E.addLight(WATER.x + WATER.w / 2, WATER.y + WATER.h / 2, 60, 0.45, '120,170,230', 0.25);
       E.addLight(120, 30, 50, 0.6, '255,230,200', 0.3);
+      E.addLight(SKULL.x, SKULL.y - 4, 14, 0.35, '200,220,255', 0.3);
       if (this.revealed) E.addLight(this.P.x, this.P.y - 10, 50, 0.6, this.playerLight.rgb, 0.4);
       else this.playerLight.r = 62 - this.fear * 34;
     }
@@ -293,5 +302,15 @@
       }
     }
   }
+  function drawSkull(ctx, x, y) {
+    ctx.globalAlpha = 0.4; E.ellipse(ctx, x - 0.5, y, 4, 1.5, '#000'); ctx.globalAlpha = 1;
+    E.rect(ctx, x - 2, y - 8, 4, 1, '#eeeaf2');                                    // cranium
+    E.rect(ctx, x - 3, y - 7, 6, 4, '#eeeaf2');
+    E.rect(ctx, x - 2, y - 3, 4, 2, '#d8d2e0');                                    // jaw
+    E.rect(ctx, x - 2, y - 6, 1, 2, '#1a1622'); E.rect(ctx, x + 1, y - 6, 1, 2, '#1a1622');  // eyes
+    E.rect(ctx, x - 1, y - 4, 2, 1, '#1a1622');                                    // nose
+    E.rect(ctx, x - 2, y - 8, 1, 1, '#ffffff');                                    // glint
+  }
+
   Y.LOC.gallery = Gallery;
 })(window.Y);

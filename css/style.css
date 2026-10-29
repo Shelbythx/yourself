@@ -50,6 +50,30 @@ button { font: inherit; color: inherit; }
 }
 #hint.show { opacity: .9; }
 
+/* --- easter egg found / the achievement --- */
+#egg-toast {
+  position: fixed; left: 50%; top: calc(16px + env(safe-area-inset-top)); z-index: 9;
+  display: flex; align-items: center; gap: 10px; pointer-events: none;
+  background: #000; border: 2px solid var(--ink); padding: 8px 14px;
+  font-family: var(--font-small); font-size: 13px; letter-spacing: .06em; color: var(--ink); white-space: nowrap;
+  opacity: 0; transform: translate(-50%, -6px); transition: opacity .6s ease, transform .6s ease;
+}
+#egg-toast.show { opacity: 1; transform: translate(-50%, 0); }
+#egg-toast svg { width: 14px; height: 14px; flex: none; color: var(--warm); }
+#egg-toast.ach { border-color: var(--warm); padding: 12px 18px; gap: 14px; box-shadow: 0 0 24px rgba(255,217,154,.25); }
+#egg-toast.ach svg { width: 22px; height: 22px; }
+#egg-toast .lbl { font-size: 11px; letter-spacing: .2em; color: var(--warm); }
+#egg-toast .name { font-family: var(--font-logo); font-size: 20px; letter-spacing: .02em; margin: 2px 0; }
+#egg-toast .desc { font-size: 12px; color: var(--ink-dim); }
+.pause-eggs, .title-ach {
+  display: flex; gap: 8px; align-items: center; justify-content: center;
+  font-family: var(--font-small); font-size: 12px; letter-spacing: .04em; color: var(--warm);
+}
+.pause-eggs { margin-top: 12px; text-align: left; }
+.pause-eggs .name { color: var(--ink); }
+.pause-eggs svg, .title-ach svg { width: 10px; height: 10px; flex: none; }
+.title-ach { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(44px + env(safe-area-inset-bottom)); white-space: nowrap; }
+
 /* --- dialog --- */
 #dialog {
   position: fixed; left: 0; right: 0; bottom: calc(14px + env(safe-area-inset-bottom));
@@ -219,4 +243,5 @@ body.touch #dialog { bottom: calc(10px + env(safe-area-inset-bottom)); }
 }
 @media (prefers-reduced-motion: reduce) {
   .logo, .load-star, .dlg-next { animation: none; }
+  #egg-toast, #egg-toast.show { transform: translate(-50%, 0); transition: opacity .6s ease; }
 }

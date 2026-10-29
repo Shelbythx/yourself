@@ -251,6 +251,7 @@
 
   /* ---------------- the world behind the chosen door ---------------- */
   const FW = 40, FH = 26;
+  const RACCOON = { x: 2 * 16 + 4, y: 2 * 16 + 12 };  // easter egg: Енот Земляной, digging in the top-left corner
   function forestMap() {
     const r = U.rng(66), rows = [];
     const pathY = x => 22 - (x / FW) * 19 + Math.sin(x * 0.3) * 2;
@@ -264,6 +265,7 @@
         if (border) c = 'T';
         else if (!onPath && !clearing && r() < 0.16) c = 'T';
         if (x >= FW - 2 && Math.abs(y - pathY(x)) < 1.6) c = '.';
+        if (x === 2 && y === 4) c = '.';  // a small clearing, so the pine doesn't hide the raccoon
         row += c;
       }
       rows.push(row);
@@ -324,10 +326,16 @@
       for (const p of this.pollen) { p.x += (14 + Math.sin(this.t + p.ph) * 6) * dt; p.y += Math.sin(this.t * 0.7 + p.ph) * 4 * dt; if (p.x > FW * 16) p.x = 0; }
       const p = this.P;
       if (!this.done && p.x > (FW - 1.5) * 16) { this.done = true; this.G.goto('stars', { out: 2, color: '#000' }); }
+      // a little dirt flies from under the raccoon's paws
+      if (Math.random() < dt * 1.6) this.particles.add({ x: RACCOON.x + 8, y: RACCOON.y - 3, vx: U.range(-6, 14), vy: U.range(-26, -12), grav: 90, life: 0.6, size: 1, color: '#6a4a2a' });
     }
 
     interactables() {
-      return [{ x: this.prop.x, y: this.prop.y, r: 30, label: TX.look, act: () => this.G.say([this.theme.prop]) }];
+      return [
+        { x: this.prop.x, y: this.prop.y, r: 30, label: TX.look, act: () => this.G.say([this.theme.prop]) },
+        { x: RACCOON.x, y: RACCOON.y, r: 22, label: TX.look, py: RACCOON.y - 12,
+          act: () => this.G.say(TX.eggs.raccoon).then(() => this.G.egg('raccoon')) }
+      ];
     }
 
     drawFloor(ctx) {
@@ -376,6 +384,7 @@
           }
         } });
       }
+      out.push({ y: RACCOON.y, draw: ctx => drawRaccoon(ctx, RACCOON.x, RACCOON.y, this.t) });
       out.push({ y: 9999, draw: ctx => this.flies.draw(ctx) });
       return out;
     }
@@ -400,5 +409,21 @@
       E.tint(ctx, '#ffd090', 0.12, 'soft-light');
     }
   }
+  // Енот Земляной, side view facing right, busy with a little mound of earth
+  function drawRaccoon(ctx, x, y, t) {
+    const dig = Math.sin(t * 9) > 0.3 ? 1 : 0, bob = Math.round(Math.abs(Math.sin(t * 4.5)));
+    ctx.globalAlpha = 0.3; E.ellipse(ctx, x, y, 9, 2, '#0a1a08'); ctx.globalAlpha = 1;
+    E.rect(ctx, x + 7, y - 2, 6, 2, '#6a4a2a'); E.rect(ctx, x + 8, y - 3, 4, 1, '#7a5a34');               // mound
+    for (let i = 0; i < 5; i++) E.rect(ctx, x - 10 + i, y - 7 + (i < 2 ? 1 : 0), 1, 3, i % 2 ? '#2e2c34' : '#8e8c98');  // ringed tail
+    E.rect(ctx, x - 5, y - 7 + bob, 9, 5, '#7c7a86'); E.rect(ctx, x - 4, y - 8 + bob, 7, 1, '#6a6874');   // body
+    E.rect(ctx, x - 4, y - 2, 2, 2, '#3a3842'); E.rect(ctx, x + 2, y - 2 - dig, 2, 2, '#3a3842');          // paws
+    E.rect(ctx, x + 3, y - 10 + bob, 5, 4, '#8e8c98');                                                  // head
+    E.rect(ctx, x + 3, y - 11 + bob, 1, 1, '#6a6874'); E.rect(ctx, x + 6, y - 11 + bob, 1, 1, '#6a6874'); // ears
+    E.rect(ctx, x + 3, y - 9 + bob, 5, 1, '#1e1c24');                                                   // mask
+    E.rect(ctx, x + 6, y - 9 + bob, 1, 1, '#f2f0f4');                                                   // eye
+    E.rect(ctx, x + 4, y - 7 + bob, 4, 1, '#e6e4ea');                                                   // white muzzle
+    E.rect(ctx, x + 8, y - 8 + bob, 1, 1, '#1e1c24');                                                   // nose
+  }
+
   Y.LOC.forest = Forest;
 })(window.Y);

@@ -110,12 +110,70 @@
     });
     $('fs-pc-name').textContent = Y.T.lang === 'en' ? 'PC' : 'ПК';
     $('lang-btn').textContent = `${t.lang}: ${Y.T.langNames[Y.T.lang]}`;
+    titleAch();
   };
+
+  /* ---------- easter eggs & the achievement ---------- */
+  const STAR_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1v4M8 11v4M1 8h4M11 8h4" stroke="currentColor" stroke-width="2"/><rect x="6" y="6" width="4" height="4" fill="currentColor"/></svg>';
+  const toastEl = $('egg-toast');
+  let toastTimer = null;
+  // fills el with the star and the given lines: [text, className]
+  function starLine(el, lines) {
+    el.innerHTML = STAR_SVG;
+    const box = document.createElement('div');
+    lines.forEach(([text, cls]) => {
+      const d = document.createElement('div');
+      if (cls) d.className = cls;
+      d.textContent = text;
+      box.appendChild(d);
+    });
+    el.appendChild(box);
+  }
+  function toast(lines, cls, sec) {
+    clearTimeout(toastTimer);
+    toastEl.className = cls;
+    starLine(toastEl, lines);
+    toastEl.hidden = false;
+    void toastEl.offsetWidth;  // let the browser see it hidden first, so the fade plays
+    toastEl.classList.add('show');
+    return new Promise(r => {
+      toastTimer = setTimeout(() => {
+        toastEl.classList.remove('show');
+        toastTimer = setTimeout(() => { toastEl.hidden = true; r(); }, 700);
+      }, sec * 1000);
+    });
+  }
+  UI.egg = async function (n, total) {
+    const t = Y.TEXT.eggs, A = Y.Audio;
+    A.sfx.sparkle(0.06);
+    A.sfx.chime(988, 0.05);
+    await toast([[`${t.found} · ${n} / ${total}`]], '', 3.2);
+    if (n < total) return;
+    A.sfx.musicBox([523, 659, 784, 1046, 1318], 0.18, 0.06);
+    UI.achOn = true;
+    toast([[t.achGot, 'lbl'], [t.achName, 'name'], [t.achDesc, 'desc']], 'ach', 7);
+  };
+  // the line in the pause menu, once at least one egg is found
+  function pauseEggs(G) {
+    const el = $('pause-eggs'), n = G.eggCount(), t = Y.TEXT.eggs;
+    el.hidden = n === 0;
+    if (!n) return;
+    const line = [[`${t.pause}: ${n} / ${G.eggTotal}`]];
+    if (n === G.eggTotal) line.push([t.achName, 'name']);
+    starLine(el, line);
+  }
+  // a small badge on the title screen for those who found everything
+  function titleAch() {
+    const el = $('title-ach');
+    el.hidden = !UI.achOn;
+    if (UI.achOn) starLine(el, [[Y.TEXT.eggs.achName]]);
+  }
 
   /* ---------- title ---------- */
   UI.title = function (opts) {
     const el = $('title');
     el.hidden = false; el.classList.remove('gone');
+    UI.achOn = !!opts.ach;
     UI.applyLang();
     const menuEl = $('title-menu');
     const askForm = () => {
@@ -191,6 +249,7 @@
     UI.pauseOpen = true;
     pauseEl.hidden = false;
     authorLine();
+    pauseEggs(G);
     const t = ui(), sound = () => t.sound + (Y.Audio.enabled ? t.on : t.off);
     const build = () => new Menu($('pause-menu'), [
       { label: t.resume, fn: () => UI.unpause(G) },

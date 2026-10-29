@@ -30,6 +30,21 @@
     return U.hslToRgb(G.state.selfHue, 75, l).map(v => v | 0).join(',');
   };
 
+  /* ---------- easter eggs: five of them and one achievement; kept apart from the save, so a restart keeps them ---------- */
+  const EGG_KEY = 'yourself.eggs.v1', EGGS = ['cat', 'save', 'flower', 'skull', 'raccoon'];
+  G.eggs = U.store.get(EGG_KEY) || {};
+  if (!G.eggs.found) G.eggs.found = {};
+  G.eggTotal = EGGS.length;
+  G.eggCount = () => EGGS.filter(k => G.eggs.found[k]).length;
+  G.hasAch = () => G.eggCount() === EGGS.length;
+  G.egg = function (id) {
+    if (G.eggs.found[id] || G.mode !== 'play') return false;
+    G.eggs.found[id] = true;
+    U.store.set(EGG_KEY, G.eggs);
+    UI.egg(G.eggCount(), EGGS.length);
+    return true;
+  };
+
   /* ---------- locations ---------- */
   G.enter = function (id, opts = {}) {
     const Cls = Y.LOC[id];
@@ -83,6 +98,7 @@
     const hasSave = !!(save && save.v === 1 && save.loc && Y.LOC[save.loc] && !save.done && (save.loc !== 'hall' || save.seen.hallMeet));
     UI.title({
       hasSave,
+      ach: G.hasAch(),
       askLang: !G.langChosen,
       onLang: lang => { Y.T.setLang(lang); G.langChosen = true; G.saveSettings(); },
       onNew: form => G.start(form),
